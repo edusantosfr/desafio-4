@@ -32,6 +32,10 @@ public abstract class Personagem {
         if (vida < 0) vida = 0;
     }
 
+    public void usarPocao() {
+        vida += 20;
+    }
+
     public boolean estaVivo(){
         return vida > 0;
     }

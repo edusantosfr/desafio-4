@@ -4,7 +4,7 @@ import org.example.Personagem;
 
 public class Guerreiro extends Personagem {
 
-    public Guerreiro(String nome, Integer vida, Integer ataque, Integer defensa) {
+    public Guerreiro(String nome) {
         super(nome, 120, 30, 40);
     }
 
