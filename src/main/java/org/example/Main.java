@@ -45,14 +45,40 @@ public class Main {
         int classe = escolhaDeClasse();
         System.out.print("\nDigite aqui o nome do seu personagem: ");
         String nomeDoPersonagem = scanner.nextLine();
-
+        Personagem personagem = null;
         switch (classe) {
-            case 1 -> {
-                Personagem personagem = new Guerreiro(nomeDoPersonagem);
-            } case 2 -> {
-                Personagem personagem = new Arqueiro(nomeDoPersonagem);
-            } case 3 -> {
-                Personagem personagem = new Mago(nomeDoPersonagem);
+            case 1 -> personagem = new Guerreiro(nomeDoPersonagem);
+            case 2 -> personagem = new Arqueiro(nomeDoPersonagem);
+            case 3 -> personagem = new Mago(nomeDoPersonagem);
+        }
+        Personagem personagemInimigo = new Guerreiro("Inimigo");
+
+        System.out.println("\nInício da Batalha!");
+        boolean turnoPersonagem = false;
+        while (personagem.estaVivo() && personagemInimigo.estaVivo()) {
+            try {
+                personagem.exibirStatus();
+                personagemInimigo.exibirStatus();
+
+                Personagem atual = turnoPersonagem ? personagem : personagemInimigo;
+                Personagem oponente = turnoPersonagem ? personagemInimigo : personagem;
+
+                System.out.println("\nTurno de " + atual.getName() + ":");
+                System.out.println("1 - Atacar");
+                System.out.println("2 - Defender");
+
+                int option = scanner.nextInt();
+
+                if (option == 1) {
+                    atual.atacar(oponente);
+                } else if (option == 2) {
+                    atual.defender();
+                }
+
+                turnoPersonagem = !turnoPersonagem;
+            } catch (InputMismatchException e) {
+                System.out.println("\nEntrada Inválida, Tente novamente.\n");
+                scanner.nextLine();
             }
         }
     }
@@ -69,8 +95,9 @@ public class Main {
                 System.out.println("Vida - 80 pts / Ataque - 50 pts / Defesa - 20 pts");
                 System.out.println("\n3. Mago");
                 System.out.println("50pts - Vida / 80pts Ataque / 20pts - Defesa");
-                System.out.print("Digite aqui sua Opção:");
+                System.out.print("\nDigite aqui sua Opção: ");
                 int option = scanner.nextInt();
+                scanner.nextLine();
 
                 switch (option) {
                     case 1 -> {
@@ -121,6 +148,6 @@ public class Main {
 
         System.out.println("\nItens");
         System.out.println("Poção de Cura");
-        System.out.println("Restaura 20 pontos de Vida (Máximo de 3 por Partida)");
+        System.out.println("Restaura 20 pontos de Vida (Máximo de 3 por Partida)\n");
     }
 }

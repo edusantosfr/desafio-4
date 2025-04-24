@@ -8,6 +8,7 @@ public abstract class Personagem {
     protected Integer vida;
     protected Integer ataque;
     protected Integer defensa;
+    protected boolean defending = false;
 
     private List<String> inventario = new ArrayList<>();
 
@@ -20,16 +21,16 @@ public abstract class Personagem {
 
     public abstract void atacar(Personagem personagemAlvo);
 
-    public Integer defender(int ataque) {
-        ataque -= defensa;
-        if (ataque < 0) ataque = 0;
-
-        return ataque;
+    public void tomarDano(int ataque) {
+        int finalDamage = defending ? ataque / 2 : ataque; // reduz dano se estiver defendendo
+        vida -= finalDamage;
+        if (vida < 0) vida = 0;
+        defending = false; // defesa só vale para 1 turno
     }
 
-    public void tomarDano(int ataque) {
-        vida -= ataque;
-        if (vida < 0) vida = 0;
+    public void defender() {
+        System.out.println(nome + " está se defendendo!");
+        defending = true;
     }
 
     public void usarPocao() {
@@ -39,4 +40,13 @@ public abstract class Personagem {
     public boolean estaVivo(){
         return vida > 0;
     }
+
+    public void exibirStatus() {
+        System.out.println(nome + " ainda tem " + vida + " pontos de vida.");
+    }
+
+    public String getName() {
+        return nome;
+    }
+
 }
