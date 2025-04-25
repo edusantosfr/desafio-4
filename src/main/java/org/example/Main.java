@@ -5,17 +5,20 @@ import org.example.subClasses.Guerreiro;
 import org.example.subClasses.Mago;
 
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
     public static Scanner scanner = new Scanner(System.in);
+
+    public static Random random = new Random();
 
     public static void main(String[] args) {
         menuInicial();
     }
 
     public static void menuInicial() {
-        System.out.println("Olá, bem vindo ao mundo de Elarion caro Jogador!!\n");
+        System.out.println("\nOlá, bem vindo ao mundo de Elarion caro Jogador!!\n");
         boolean isJogando = true;
 
         while (isJogando) {
@@ -45,6 +48,7 @@ public class Main {
         int classe = escolhaDeClasse();
         System.out.print("\nDigite aqui o nome do seu personagem: ");
         String nomeDoPersonagem = scanner.nextLine();
+
         Personagem personagem = null;
         switch (classe) {
             case 1 -> personagem = new Guerreiro(nomeDoPersonagem);
@@ -63,16 +67,30 @@ public class Main {
                 Personagem atual = turnoPersonagem ? personagem : personagemInimigo;
                 Personagem oponente = turnoPersonagem ? personagemInimigo : personagem;
 
-                System.out.println("\nTurno de " + atual.getName() + ":");
-                System.out.println("1 - Atacar");
-                System.out.println("2 - Defender");
+                int option;
+                if (atual == personagemInimigo) {
+                    System.out.println();
+                    option = iaDoInimigo();
+                } else {
+                    System.out.println("\nTurno de " + atual.getName() + ":");
+                    System.out.println("O que pretende fazer em seu turno?");
+                    System.out.println("1. Atacar");
+                    System.out.println("2. Defender");
+                    System.out.println("3. Usar Poção");
+                    System.out.print("Digite aqui sua Opção: ");
 
-                int option = scanner.nextInt();
+                    option = scanner.nextInt();
+                }
 
-                if (option == 1) {
-                    atual.atacar(oponente);
-                } else if (option == 2) {
-                    atual.defender();
+                switch (option) {
+                    case 1 -> {
+                        if (atual == personagemInimigo) {
+                            System.out.println("O " + atual.getName() + " te ataca diretamente!\n");
+                        }
+                        atual.atacar(oponente);
+                    }
+                    case 2 -> atual.defender();
+                    case 3 -> atual.usarPocao();
                 }
 
                 turnoPersonagem = !turnoPersonagem;
@@ -120,8 +138,11 @@ public class Main {
                 scanner.nextLine();
             }
         }
-
         return classe;
+    }
+
+    public static Integer iaDoInimigo() {
+        return random.nextInt(1, 3);
     }
 
     public static void regrasDeJogo() {
