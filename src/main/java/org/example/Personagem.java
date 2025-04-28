@@ -10,7 +10,7 @@ public abstract class Personagem {
     protected Integer defensa;
     protected boolean defendendo = false;
 
-    private List<String> inventario = new ArrayList<>();
+    protected final List<String> inventario = new ArrayList<>();
 
     public Personagem(String nome, Integer vida, Integer ataque, Integer defensa) {
         this.nome = nome;
@@ -34,7 +34,16 @@ public abstract class Personagem {
     }
 
     public void usarPocao() {
-        vida += 20;
+        if (!inventario.isEmpty()) {
+            inventario.remove("Poção de Vida");
+            vida += 20;
+        }
+    }
+
+    public void adicionarPocao() {
+        for (int i = 0; i < 3; i++){
+            inventario.add("Poção de Vida");
+        }
     }
 
     public boolean estaVivo(){
@@ -48,5 +57,4 @@ public abstract class Personagem {
     public String getName() {
         return nome;
     }
-
 }

@@ -46,20 +46,35 @@ public class Main {
 
     public static void iniciarNovoJogo() {
         int classe = escolhaDeClasse();
+        int classeInimigo = escolhaDeClasseInimigo();
+
         System.out.print("\nDigite aqui o nome do seu personagem: ");
         String nomeDoPersonagem = scanner.nextLine();
 
+        //escolha do Classe do Jogador
         Personagem personagem = null;
         switch (classe) {
             case 1 -> personagem = new Guerreiro(nomeDoPersonagem);
             case 2 -> personagem = new Arqueiro(nomeDoPersonagem);
             case 3 -> personagem = new Mago(nomeDoPersonagem);
         }
-        Personagem personagemInimigo = new Guerreiro("Inimigo");
+
+        //escolha do Classe do Inimigo
+        Personagem personagemInimigo = null;
+        switch (classeInimigo) {
+            case 1 -> personagemInimigo = new Guerreiro("Lacaio Inimigo");
+            case 2 -> personagemInimigo = new Arqueiro("Lacaio Inimigo");
+            case 3 -> personagemInimigo = new Mago("Lacaio Inimigo");
+        }
+
+        assert personagem != null;
+        personagem.adicionarPocao();
 
         System.out.println("\nInício da Batalha!");
         boolean turnoPersonagem = false;
-        while (personagem.estaVivo() && personagemInimigo.estaVivo()) {
+        while (personagem.estaVivo()) {
+            assert personagemInimigo != null;
+            if (!personagemInimigo.estaVivo()) break;
             try {
                 personagem.exibirStatus();
                 personagemInimigo.exibirStatus();
@@ -67,19 +82,20 @@ public class Main {
                 Personagem atual = turnoPersonagem ? personagem : personagemInimigo;
                 Personagem oponente = turnoPersonagem ? personagemInimigo : personagem;
 
-                int option;
+                int option = 0;
                 if (atual == personagemInimigo) {
                     System.out.println();
-                    option = iaDoInimigo();
+                    option = iaDeTurnoInimigo();
                 } else {
-                    System.out.println("\nTurno de " + atual.getName() + ":");
-                    System.out.println("O que pretende fazer em seu turno?");
-                    System.out.println("1. Atacar");
-                    System.out.println("2. Defender");
-                    System.out.println("3. Usar Poção");
-                    System.out.print("Digite aqui sua Opção: ");
-
-                    option = scanner.nextInt();
+                    boolean condition = true;
+                    while (condition || option < 1 || option > 3) {
+                        option = turnoPersonagem(atual.getName(), !personagem.inventario.isEmpty());
+                        if (personagem.inventario.isEmpty() && option == 3) {
+                            System.out.println("\nSeu inventário está vazio");
+                        } else {
+                            condition = false;
+                        }
+                    }
                 }
 
                 switch (option) {
@@ -90,7 +106,11 @@ public class Main {
                         atual.atacar(oponente);
                     }
                     case 2 -> atual.defender();
-                    case 3 -> atual.usarPocao();
+                    case 3 -> {
+                        if (!personagem.inventario.isEmpty()){
+                            atual.usarPocao();
+                        }
+                    }
                 }
 
                 turnoPersonagem = !turnoPersonagem;
@@ -141,8 +161,36 @@ public class Main {
         return classe;
     }
 
-    public static Integer iaDoInimigo() {
-        return random.nextInt(1, 3);
+    public static Integer turnoPersonagem(String name, boolean isInvetarioEmpty) {
+        int option;
+        System.out.println("\nTurno de " + name + ":");
+        System.out.println("O que pretende fazer em seu turno?");
+        System.out.println("1. Atacar");
+        System.out.println("2. Defender");
+        if (isInvetarioEmpty){
+            System.out.println("3. Usar Poção");
+        }
+        System.out.print("Digite aqui sua Opção: ");
+        option = scanner.nextInt();
+
+        return option;
+    }
+
+    public static Integer escolhaDeClasseInimigo() {
+        return random.nextInt(1, 4);
+    }
+
+    public static Integer iaDeTurnoInimigo() {
+        int escolha = random.nextInt(1, 100);
+        int option;
+
+        if (escolha < 30) {
+            option = 2;
+        } else {
+            option = 1;
+        }
+
+        return option;
     }
 
     public static void regrasDeJogo() {
