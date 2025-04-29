@@ -29,7 +29,7 @@ public abstract class Personagem {
     }
 
     public void defender() {
-        System.out.println(nome + " está se defendendo!\n");
+        System.out.println("\n" + nome + " está se defendendo!\n");
         defendendo = true;
     }
 
@@ -37,6 +37,7 @@ public abstract class Personagem {
         if (!inventario.isEmpty()) {
             inventario.remove("Poção de Vida");
             vida += 20;
+            System.out.println("\nVocê se curou em 20 pontos\n");
         }
     }
 
