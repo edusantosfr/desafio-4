@@ -29,7 +29,7 @@ public abstract class Personagem {
     }
 
     public void defender() {
-        System.out.println("\n" + nome + " está se defendendo!\n");
+        System.out.println(nome + " está se defendendo!\n");
         defendendo = true;
     }
 

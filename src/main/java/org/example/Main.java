@@ -18,7 +18,6 @@ public class Main {
 
     public static Integer contagemDoAtaqueEspecial;
     public static Integer classe;
-    public static Boolean ganhou = false;
 
     public static void main(String[] args) {
         menuInicial();
@@ -122,7 +121,11 @@ public class Main {
                     //execução da ação
                     switch (option) {
                         case 1 -> {
-                            System.out.println("\nO " + atual.getName() + " ataca diretamente!\n");
+                            if (atual == personagemInimigo) {
+                                System.out.println("O " + atual.getName() + " te ataca diretamente!\n");
+                            } else {
+                                System.out.println("\nO " + atual.getName() + " ataca diretamente!\n");
+                            }
                             atual.atacar(oponente);
                         }
                         case 2 -> atual.defender();
@@ -151,8 +154,15 @@ public class Main {
                     System.out.println("\nEntrada Inválida, Tente novamente.\n");
                     scanner.nextLine();
                 }
+
+                //termina todas as partidas se o jogador perder uma delas ou mostra a mensagem de vitória dele
                 if (!personagem.estaVivo()) {
+                    System.out.println("Não foi desta vez " + personagem.getName());
+                    System.out.println("Mas continue Tentando!!\n");
                     break partidas;
+                } else {
+                    System.out.println("Você venceu contra " + personagemInimigo.getName());
+                    System.out.println("Parabéns!!\n");
                 }
             }
         }
